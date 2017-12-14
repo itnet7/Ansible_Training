@@ -1,0 +1,80 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+  
+  # Every Vagrant virtual environment requires a box to build off of.
+        config.vm.provider :libvirt do |domain|
+         domain.driver = "kvm"
+         domain.host = 'localhost'
+         domain.uri = 'qemu:///system'
+         domain.memory = 256
+         domain.cpus = 1
+        end
+	config.vm.define "ansible-node" do |an|
+         an.vm.box = "centos/7"
+         an.ssh.insert_key = false
+         an.ssh.forward_agent = true
+         an.vm.provider :libvirt do |domain|
+           domain.memory = 128
+         end
+         an.vm.hostname = "ansible-node"
+         an.vm.network :private_network, ip: "10.42.0.2"
+         end
+        config.vm.define "node-1" do |nd1|
+         nd1.vm.box = "centos/7"
+         nd1.ssh.insert_key = false
+         nd1.vm.provider :libvirt do |domain|
+          domain.memory = 256 
+        end
+         nd1.vm.hostname = "node-1"
+         nd1.vm.network :private_network, ip: "10.42.0.6"
+        end
+
+        config.vm.define "node-2" do |nd2|
+         nd2.vm.box = "centos/7"
+         nd2.ssh.insert_key = false
+         nd2.vm.provider :libvirt do |domain|
+          domain.memory = 256
+        end
+         nd2.vm.hostname = "node-2"
+         nd2.vm.network :private_network, ip: "10.42.0.7"
+        end
+        
+        config.vm.define "node-3" do |nd3|
+         nd3.vm.box = "centos/7"
+         nd3.ssh.insert_key = false
+         nd3.vm.provider :libvirt do |domain|
+          domain.memory = 256
+        end
+         nd3.vm.hostname = "node-3"
+         nd3.vm.network :private_network, ip: "10.42.0.8"
+        end
+
+        config.vm.define "node-4" do |nd4|
+         nd4.vm.box = "centos/7"
+         nd4.ssh.insert_key = false
+         nd4.vm.provider :libvirt do |domain|
+          domain.memory = 256
+         end
+         nd4.vm.hostname = "node-4"
+         nd4.vm.network :private_network, ip: "10.42.0.100"
+        end
+        
+        config.vm.define "tower" do |tower|
+         tower.vm.box = "ansible-tower-2.4.4-virtualbox"
+         tower.ssh.insert_key = false
+         tower.vm.provider :libvirt do |domain|
+          domain.memory = 2048 
+        end
+         tower.vm.hostname = "tower"
+         tower.vm.network :private_network, ip: "10.42.0.42"
+        end
+        
+       end
